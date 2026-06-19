@@ -477,22 +477,18 @@ const ADMIN_KEY = "mk22_admin_logged_in";
 const defaultCities = ["Khandwa", "Indore", "Gogawan", "Burhanpur", "Khargone"];
 
 // ==================== FIREBASE SETUP ====================
-// IMPORTANT: Replace the values below with YOUR Firebase config
-// Your project is "khatri-community"
-// 1. Go to https://console.firebase.google.com/project/khatri-community/settings/general
-// 2. Scroll to "Your apps" > Web app > "Config" (click the </> icon if needed)
-// 3. Copy the entire firebaseConfig object and paste below
-// 4. Make sure Realtime Database is enabled (you already have the link)
+// Firebase config for khatri-community project (Realtime Database)
+// All data is saved under path: communityData
 
 const firebaseConfig = {
-  // YAHAN APNA REAL CONFIG PASTE KARO (neeche wale steps follow karo)
-  apiKey: "PASTE_YOUR_API_KEY_HERE",
+  apiKey: "AIzaSyBn2IhtLq7lOVjkGCVyzzTBaaIRSRxZVN4",
   authDomain: "khatri-community.firebaseapp.com",
   databaseURL: "https://khatri-community-default-rtdb.firebaseio.com",
   projectId: "khatri-community",
-  storageBucket: "khatri-community.appspot.com",
-  messagingSenderId: "PASTE_YOUR_SENDER_ID_HERE",
-  appId: "PASTE_YOUR_APP_ID_HERE"
+  storageBucket: "khatri-community.firebasestorage.app",
+  messagingSenderId: "88902934083",
+  appId: "1:88902934083:web:69e67a61d7b6be45353ef6",
+  measurementId: "G-NYCQQ6QHND"
 };
 
 let firebaseInitialized = false;
@@ -502,10 +498,9 @@ let currentData = null; // in-memory data
 function initFirebase() {
   if (firebaseInitialized || !window.firebase) return;
 
-  // Check if user has replaced the placeholder config
-  if (firebaseConfig.apiKey.includes("REPLACE_WITH_YOUR_API_KEY")) {
-    console.warn("%c[FIREBASE] Please replace the firebaseConfig values with your real ones from console!", "color:orange;font-size:13px");
-    // Falls back to localStorage until you put the real config
+  // Firebase config loaded
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey.length < 20) {
+    console.warn("%c[FIREBASE] Config missing or invalid - data will be local only!", "color:red;font-size:14px");
     return;
   }
 
@@ -567,7 +562,11 @@ function saveData(data) {
 
   if (dbRef) {
     // Write to Firebase - this will sync to ALL devices instantly
-    dbRef.set(data).catch(err => console.error("Firebase save error:", err));
+    dbRef.set(data)
+      .then(() => console.log("[FIREBASE] Data saved to cloud successfully"))
+      .catch(err => console.error("Firebase save error:", err));
+  } else {
+    console.warn("%c[FIREBASE] Not connected - saving only locally!", "color:orange");
   }
 }
 
