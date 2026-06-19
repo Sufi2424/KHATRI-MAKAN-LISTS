@@ -572,6 +572,47 @@ function saveData(data) {
   }
 }
 
+// Force load fresh data from Firebase on every page load/refresh
+// This fixes the issue of not seeing saved records on home after save or refresh
+function loadFreshDataFromFirebase() {
+  if (!dbRef) {
+    // fallback to current getData logic
+    const data = getData();
+    currentData = data;
+    renderAllPages();
+    return;
+  }
+
+  dbRef.once('value')
+    .then(snapshot => {
+      const data = snapshot.val();
+      if (data && Array.isArray(data.cities)) {
+        currentData = data;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } else {
+        currentData = createDefaultData();
+        dbRef.set(currentData);
+      }
+      console.log("[FIREBASE] Fresh data loaded from cloud");
+      renderAllPages();
+    })
+    .catch(err => {
+      console.error("Firebase load error, using local:", err);
+      currentData = getData();
+      renderAllPages();
+    });
+}
+
+function renderAllPages() {
+  setYear();
+  renderHome();
+  renderMakan();
+  renderShadi();
+  renderCityMohallas();
+  renderMohallaPage();
+  if (sessionStorage.getItem(ADMIN_KEY) === "yes") renderAdmin();
+}
+
 let editingMakanId = null;
 let editingShadiId = null;
 let editingCityId = null;
@@ -1237,32 +1278,11 @@ function refreshPageContent() {
   if (sessionStorage.getItem(ADMIN_KEY) === "yes") renderAdmin();
 }
 
-setYear();
-renderHome();
-setupMakan();
-setupShadi();
-renderCityMohallas();
-renderMohallaPage();
-setupAdmin();
-
 window.addEventListener("languagechange", refreshPageContent);
 
-// Setup Firebase first so listener can populate currentData before renders
 initFirebase();
-setupFirebaseListener();
+setupFirebaseListener();  // keeps listening for changes while on page
 
-// Seed default if completely empty (after a short delay)
-setTimeout(() => {
-  if (!currentData && dbRef) {
-    const defaultData = createDefaultData();
-    saveData(defaultData);
-  }
-}, 1200);
-
-setYear();
-renderHome();
-setupMakan();
-setupShadi();
-renderCityMohallas();
-renderMohallaPage();
-setupAdmin();
+// Always pull fresh data from Firebase on load or refresh
+// This ensures saved records show on home page
+loadFreshDataFromFirebase();
