@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n-title="admin.title">एडमिन पैनल - Muslim Khatri 22 Nukh Jamaat</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Firebase SDK for real-time data sync -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
   <header class="site-header compact">
@@ -55,16 +58,16 @@
         </section>
 
         <section class="admin-section">
-          <h3>Data File (Backup)</h3>
-          <p class="muted">सभी रिकॉर्ड एक अलग data.json फाइल में रख सकते हो। Export करके रखो, बाद में Import करो।</p>
-          <div class="admin-actions-row">
-            <button class="btn secondary" id="exportJsonBtn" type="button">Export data.json</button>
+          <h3>Firebase Data (Cloud Sync)</h3>
+          <p class="muted">Data ab Firebase cloud mein save hota hai. Kisi bhi device par (mobile, laptop) site kholo → latest data turant dikhega. Real-time sync on!</p>
+          <div class="admin-actions-row" style="flex-wrap: wrap; gap: 8px;">
+            <button class="btn secondary" id="exportJsonBtn" type="button">Backup as data.json</button>
             <label class="btn secondary" style="cursor: pointer; display: inline-flex; align-items: center;">
-              Import data.json
+              Import from JSON
               <input type="file" id="importJsonInput" accept=".json" style="display:none">
             </label>
           </div>
-          <small class="muted">Note: Data अभी भी browser localStorage में रहता है। JSON backup के लिए है।</small>
+          <small class="muted">Note: Changes automatically sync across all devices. No manual import needed!</small>
         </section>
       </div>
     </section>

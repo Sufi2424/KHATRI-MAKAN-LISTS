@@ -472,9 +472,104 @@ window.t = t;
 window.getLang = getLang;
 window.setLanguage = setLanguage;
 window.applyTranslations = applyTranslations;
-const STORAGE_KEY = "mk22_jamaat_data_v1";
+const STORAGE_KEY = "mk22_jamaat_data_v1"; // kept for backward, but Firebase is primary now
 const ADMIN_KEY = "mk22_admin_logged_in";
 const defaultCities = ["Khandwa", "Indore", "Gogawan", "Burhanpur", "Khargone"];
+
+// ==================== FIREBASE SETUP ====================
+// IMPORTANT: Replace the values below with YOUR Firebase config
+// Your project is "khatri-community"
+// 1. Go to https://console.firebase.google.com/project/khatri-community/settings/general
+// 2. Scroll to "Your apps" > Web app > "Config" (click the </> icon if needed)
+// 3. Copy the entire firebaseConfig object and paste below
+// 4. Make sure Realtime Database is enabled (you already have the link)
+
+const firebaseConfig = {
+  // YAHAN APNA REAL CONFIG PASTE KARO (neeche wale steps follow karo)
+  apiKey: "PASTE_YOUR_API_KEY_HERE",
+  authDomain: "khatri-community.firebaseapp.com",
+  databaseURL: "https://khatri-community-default-rtdb.firebaseio.com",
+  projectId: "khatri-community",
+  storageBucket: "khatri-community.appspot.com",
+  messagingSenderId: "PASTE_YOUR_SENDER_ID_HERE",
+  appId: "PASTE_YOUR_APP_ID_HERE"
+};
+
+let firebaseInitialized = false;
+let dbRef = null; // reference to 'communityData'
+let currentData = null; // in-memory data
+
+function initFirebase() {
+  if (firebaseInitialized || !window.firebase) return;
+
+  // Check if user has replaced the placeholder config
+  if (firebaseConfig.apiKey.includes("REPLACE_WITH_YOUR_API_KEY")) {
+    console.warn("%c[FIREBASE] Please replace the firebaseConfig values with your real ones from console!", "color:orange;font-size:13px");
+    // Falls back to localStorage until you put the real config
+    return;
+  }
+
+  try {
+    firebase.initializeApp(firebaseConfig);
+    dbRef = firebase.database().ref('communityData');
+    firebaseInitialized = true;
+  } catch (e) {
+    console.error("Firebase init failed. Did you add your config?", e);
+  }
+}
+
+function createDefaultData() {
+  const cities = defaultCities.map((name) => ({ id: slugify(name), name }));
+  const data = { cities, makan: {}, shadi: {} };
+  cities.forEach((city) => {
+    data.makan[city.id] = [];
+    data.shadi[city.id] = [];
+  });
+  return data;
+}
+
+// Listen for real-time changes from any device
+function setupFirebaseListener() {
+  if (!dbRef) return;
+  dbRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    if (data && Array.isArray(data.cities)) {
+      currentData = data;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); // keep local backup
+    } else {
+      currentData = createDefaultData();
+      dbRef.set(currentData); // seed if empty
+    }
+    // Auto refresh UI when data changes (from any device!)
+    if (typeof refreshPageContent === 'function') {
+      refreshPageContent();
+    }
+  });
+}
+
+function getData() {
+  if (currentData) return currentData;
+
+  // Fallback if Firebase not ready yet
+  try {
+    const local = localStorage.getItem(STORAGE_KEY);
+    if (local) {
+      const parsed = JSON.parse(local);
+      if (parsed && Array.isArray(parsed.cities)) return parsed;
+    }
+  } catch {}
+  return createDefaultData();
+}
+
+function saveData(data) {
+  currentData = data;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); // keep local cache
+
+  if (dbRef) {
+    // Write to Firebase - this will sync to ALL devices instantly
+    dbRef.set(data).catch(err => console.error("Firebase save error:", err));
+  }
+}
 
 let editingMakanId = null;
 let editingShadiId = null;
@@ -757,7 +852,7 @@ function exportTableCsv(tableSelector, filePrefix) {
   URL.revokeObjectURL(link.href);
 }
 
-// --- Data File (JSON backup) support ---
+// --- Data JSON backup support (for safety / moving data) ---
 function exportDataJson() {
   const data = getData();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -1062,6 +1157,7 @@ function setupAdmin() {
     }
   });
 
+  // Note: Firebase handles real-time sync now. Backup buttons are for safety.
   syncPanels();
 }
 
@@ -1176,3 +1272,18 @@ renderMohallaPage();
 setupAdmin();
 
 window.addEventListener("languagechange", refreshPageContent);
+
+// ==================== FIREBASE INITIALIZATION ====================
+// This replaces the old localStorage + data.json approach with real-time sync
+(async () => {
+  initFirebase();
+  setupFirebaseListener();
+
+  // Optional: Seed default data if database is completely empty (first time ever)
+  setTimeout(() => {
+    if (!currentData) {
+      const defaultData = createDefaultData();
+      saveData(defaultData);
+    }
+  }, 1500);
+})();
