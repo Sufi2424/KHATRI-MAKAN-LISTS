@@ -478,7 +478,7 @@ const defaultCities = ["Khandwa", "Indore", "Gogawan", "Burhanpur", "Khargone"];
 
 // ==================== FIREBASE SETUP ====================
 // Firebase config for khatri-community project (Realtime Database)
-// All data is saved under path: communityData
+// All makan/shadi data is saved under /communityData in the Realtime Database
 
 const firebaseConfig = {
   apiKey: "AIzaSyBn2IhtLq7lOVjkGCVyzzTBaaIRSRxZVN4",
@@ -563,7 +563,9 @@ function saveData(data) {
   if (dbRef) {
     // Write to Firebase - this will sync to ALL devices instantly
     dbRef.set(data)
-      .then(() => console.log("[FIREBASE] Data saved to cloud successfully"))
+      .then(() => {
+        console.log("[FIREBASE] Data saved to cloud successfully");
+      })
       .catch(err => console.error("Firebase save error:", err));
   } else {
     console.warn("%c[FIREBASE] Not connected - saving only locally!", "color:orange");
@@ -594,33 +596,6 @@ function escapeHtml(value) {
     ">": "&gt;",
     '"': "&quot;",
   }[char]));
-}
-
-function getData() {
-  let data;
-  try {
-    data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-  } catch {
-    data = null;
-  }
-
-  if (!data || !Array.isArray(data.cities)) {
-    const cities = defaultCities.map((name) => ({ id: slugify(name), name }));
-    data = { cities, makan: {}, shadi: {} };
-  }
-
-  data.makan ||= {};
-  data.shadi ||= {};
-  data.cities.forEach((city) => {
-    data.makan[city.id] ||= [];
-    data.shadi[city.id] ||= [];
-  });
-  saveData(data);
-  return data;
-}
-
-function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 function params() {
@@ -1272,17 +1247,22 @@ setupAdmin();
 
 window.addEventListener("languagechange", refreshPageContent);
 
-// ==================== FIREBASE INITIALIZATION ====================
-// This replaces the old localStorage + data.json approach with real-time sync
-(async () => {
-  initFirebase();
-  setupFirebaseListener();
+// Setup Firebase first so listener can populate currentData before renders
+initFirebase();
+setupFirebaseListener();
 
-  // Optional: Seed default data if database is completely empty (first time ever)
-  setTimeout(() => {
-    if (!currentData) {
-      const defaultData = createDefaultData();
-      saveData(defaultData);
-    }
-  }, 1500);
-})();
+// Seed default if completely empty (after a short delay)
+setTimeout(() => {
+  if (!currentData && dbRef) {
+    const defaultData = createDefaultData();
+    saveData(defaultData);
+  }
+}, 1200);
+
+setYear();
+renderHome();
+setupMakan();
+setupShadi();
+renderCityMohallas();
+renderMohallaPage();
+setupAdmin();
