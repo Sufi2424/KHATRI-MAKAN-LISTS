@@ -732,7 +732,7 @@ function updatePageCity(city) {
 }
 
 function getMakanRecords(city) {
-  const data = getData();
+  const data = ensureDataStructure(getData());
   return data.makan[city.id] || [];
 }
 
@@ -750,13 +750,13 @@ function renderHome() {
   const cityList = document.getElementById("cityList");
   if (!cityList) return;
 
-  const data = getData();
+  const data = ensureDataStructure(getData());
   const cityCount = document.getElementById("cityCount");
   if (cityCount) cityCount.textContent = t("home.cityCount", { count: data.cities.length });
 
   cityList.innerHTML = data.cities.map((city) => {
-    const totalMakan = (data.makan[city.id] || []).length;
-    const totalShadi = (data.shadi[city.id] || []).length;
+    const totalMakan = (data.makan && data.makan[city.id] || []).length;
+    const totalShadi = (data.shadi && data.shadi[city.id] || []).length;
     return `
       <div class="city-row">
         <a class="btn primary" href="${listPage("makan", city)}">${escapeHtml(t("home.makanList"))}</a>
@@ -994,10 +994,10 @@ function renderShadi() {
   const table = document.getElementById("shadiTable");
   if (!table) return;
 
-  const data = getData();
+  const data = ensureDataStructure(getData());
   const city = currentCity();
   updatePageCity(city);
-  const records = filteredShadiRecords(data.shadi[city.id] || []);
+  const records = filteredShadiRecords((data.shadi && data.shadi[city.id]) || []);
 
   table.innerHTML = records.map((item) => `
     <tr>
