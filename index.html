@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="home.title">Muslim Khatri 22 Nukh Jamaat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="eyebrow" data-i18n="home.eyebrow">Community Directory</p>
+      <h1>Muslim Khatri 22 Nukh Jamaat</h1>
+      <p class="tagline" data-i18n="home.tagline">हर शहर/गांव की मकान और शादी जानकारी के लिए सुरक्षित स्थानीय रिकॉर्ड</p>
+    </div>
+  </header>
+  
+  <nav class="top-nav" data-i18n-aria="nav.mainLabel" aria-label="मुख्य नेविगेशन">
+    <a class="nav-link active" href="index.html" data-i18n="nav.home">होम</a>
+    <a class="nav-link" href="admin.html" data-i18n="nav.admin">एडमिन पैनल</a>
+  </nav>
+
+  <main class="container">
+    <section class="intro-band">
+      <div>
+        <h2 data-i18n="home.selectCity">शहर/गांव चुनें</h2>
+        <p data-i18n="home.selectCityDesc">मकान और शादी की सूची शहर/गांव के हिसाब से अलग-अलग देखें।</p>
+      </div>
+      <div class="status-pill" id="cityCount">0 शहर/गांव</div>
+    </section>
+
+    <section class="city-panel" aria-labelledby="cityHeading">
+      <h2 id="cityHeading" class="section-title" data-i18n="home.cityList">शहर/गांव लिस्ट</h2>
+      <div class="city-list" id="cityList"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p data-i18n-footer>© <span id="year"></span> Muslim Khatri 22 Nukh Jamaat. Data इस browser में सुरक्षित रहता है।</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

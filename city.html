@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="city.title">मोहल्ला सूची - Muslim Khatri 22 Nukh Jamaat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header compact">
+    <div class="header-inner">
+      <p class="eyebrow" data-i18n="city.eyebrow">Mohalla Directory</p>
+      <h1>Muslim Khatri 22 Nukh Jamaat</h1>
+      <p class="tagline" id="citySubtitle"><span id="pageCity">City/Village</span></p>
+    </div>
+  </header>
+  <nav class="top-nav" data-i18n-aria="nav.mainLabel" aria-label="मुख्य नेविगेशन">
+    <a class="nav-link" href="index.html" data-i18n="nav.home">होम</a>
+    <a class="nav-link" href="admin.html" data-i18n="nav.admin">एडमिन पैनल</a>
+  </nav>
+  <main class="container">
+    <section class="toolbar">
+      <div>
+        <h2 class="section-title" data-i18n="city.heading">मोहल्ला लिस्ट</h2>
+        <p class="muted" data-i18n="city.desc">इस शहर/गांव में रिकॉर्ड add करते समय लिखे गए मोहल्ले यहां दिखेंगे।</p>
+      </div>
+      <div class="actions">
+        <a class="btn primary" id="cityMakanLink" href="#" data-i18n="city.addMakan">मकान रिकॉर्ड जोड़ें</a>
+        <a class="btn secondary" id="cityShadiLink" href="#" data-i18n="city.shadiList">शादी सूची</a>
+      </div>
+    </section>
+    <section class="city-panel">
+      <div class="city-list" id="mohallaList"></div>
+      <p class="empty-state" id="mohallaEmpty" data-i18n="city.empty">अभी इस शहर/गांव में कोई मोहल्ला नहीं है। पहले मकान रिकॉर्ड में मोहल्ला add करें।</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

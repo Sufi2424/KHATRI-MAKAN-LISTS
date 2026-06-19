@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="shadi.title">शादी सूची - Muslim Khatri 22 Nukh Jamaat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header compact">
+    <div class="header-inner">
+      <p class="eyebrow" data-i18n="shadi.eyebrow">Marriage Directory</p>
+      <h1>Muslim Khatri 22 Nukh Jamaat</h1>
+      <p class="tagline" id="shadiSubtitle"><span id="pageCity">City/Village</span></p>
+    </div>
+  </header>
+  <nav class="top-nav" data-i18n-aria="nav.mainLabel" aria-label="मुख्य नेविगेशन">
+    <a class="nav-link" href="index.html" data-i18n="nav.home">होम</a>
+    <a class="nav-link" href="admin.html" data-i18n="nav.admin">एडमिन पैनल</a>
+  </nav>
+  <main class="container">
+    <section class="toolbar">
+      <div>
+        <h2 class="section-title" data-i18n="shadi.heading">शादी सूची</h2>
+        <p class="muted" data-i18n="shadi.desc">नाम, छाप, दिन या समय से खोजें।</p>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="addShadiBtn" type="button" data-i18n="shadi.newShadi">नई शादी</button>
+        <button class="btn secondary" id="sortDateBtn" type="button" data-i18n="shadi.sortDate">Date Sort</button>
+      </div>
+    </section>
+    <section class="filters single">
+      <label><span data-i18n="common.search">Search</span><input id="searchShadi" type="search" data-i18n-placeholder="shadi.searchPh" placeholder="खोजें"></label>
+    </section>
+    <section class="table-card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="shadi.colDate">Date</th>
+              <th data-i18n="shadi.colDay">Day</th>
+              <th data-i18n="shadi.colName">Name</th>
+              <th data-i18n="shadi.colChaap">Chaap</th>
+              <th data-i18n="shadi.colTime">Subah/Shaam</th>
+              <th data-i18n="common.action">Action</th>
+            </tr>
+          </thead>
+          <tbody id="shadiTable"></tbody>
+        </table>
+      </div>
+      <p class="empty-state" id="shadiEmpty" data-i18n="shadi.empty">अभी कोई शादी रिकॉर्ड नहीं है।</p>
+    </section>
+  </main>
+  <dialog class="modal" id="shadiModal">
+    <form method="dialog" class="modal-box" id="shadiForm">
+      <div class="modal-head">
+        <h2 id="shadiModalTitle" data-i18n="shadi.newRecord">नई शादी रिकॉर्ड</h2>
+        <button class="icon-btn" value="cancel" type="submit" data-i18n-aria="common.close" aria-label="बंद करें">×</button>
+      </div>
+      <div class="form-grid">
+        <label><span data-i18n="shadi.labelDate">Date</span><input name="date" type="date" required></label>
+        <label><span data-i18n="shadi.labelDay">Day</span><input name="day" required></label>
+        <label><span data-i18n="shadi.labelName">Name</span><input name="name" required></label>
+        <label><span data-i18n="shadi.labelChaap">Chaap</span><input name="chaap" required></label>
+        <label><span data-i18n="shadi.labelTime">Subah/Shaam</span><select name="time" required><option value="Subah">Subah</option><option value="Shaam">Shaam</option></select></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel" type="submit" data-i18n="common.cancel">रद्द करें</button>
+        <button class="btn primary" value="default" type="submit" data-i18n="common.save">सेव करें</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>

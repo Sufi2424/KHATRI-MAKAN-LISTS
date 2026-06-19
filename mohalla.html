@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="mohalla.title">मोहल्ला मकान सूची - Muslim Khatri 22 Nukh Jamaat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header compact">
+    <div class="header-inner">
+      <p class="eyebrow" data-i18n="mohalla.eyebrow">Mohalla Makan Directory</p>
+      <h1>Muslim Khatri 22 Nukh Jamaat</h1>
+      <p class="tagline" id="mohallaSubtitle"><span id="pageMohalla">मोहल्ला</span> - <span id="pageCity">शहर/गांव</span></p>
+    </div>
+  </header>
+  <nav class="top-nav" data-i18n-aria="nav.mainLabel" aria-label="मुख्य नेविगेशन">
+    <a class="nav-link" href="index.html" data-i18n="nav.home">होम</a>
+    <a class="nav-link" id="backCityLink" href="#" data-i18n="nav.backMohallas">शहर/गांव के मोहल्ले</a>
+    <a class="nav-link" href="admin.html" data-i18n="nav.admin">एडमिन पैनल</a>
+  </nav>
+  <main class="container">
+    <section class="toolbar">
+      <div>
+        <h2 class="section-title" data-i18n="mohalla.heading">मोहल्ले की मकान सूची</h2>
+        <p class="muted" data-i18n="mohalla.desc">इस पेज पर सिर्फ चुने हुए मोहल्ले के मकान दिखेंगे।</p>
+      </div>
+      <div class="actions">
+        <a class="btn primary" id="mohallaAddLink" href="#" data-i18n="common.newRecord">नया रिकॉर्ड</a>
+        <button class="btn success" id="exportMohallaBtn" type="button" data-i18n="common.excelExport">Excel Export</button>
+      </div>
+    </section>
+    <section class="table-card makan-sheet">
+      <div class="table-wrap">
+        <table class="makan-register">
+          <thead>
+            <tr>
+              <th data-i18n="makan.colSerial">क्र.</th>
+              <th data-i18n="makan.colHouse">H.N.</th>
+              <th data-i18n="makan.colLakab">लक़ब</th>
+              <th data-i18n="makan.colName">नाम</th>
+              <th data-i18n="makan.colFather">वल्द नाम</th>
+              <th data-i18n="makan.colChaap">छाप *</th>
+              <th data-i18n="makan.colMobile">मोबाईल न.</th>
+            </tr>
+          </thead>
+          <tbody id="mohallaTable"></tbody>
+        </table>
+      </div>
+      <p class="empty-state" id="mohallaTableEmpty" data-i18n="mohalla.empty">अभी इस मोहल्ले में कोई रिकॉर्ड नहीं है।</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

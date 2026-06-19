@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="admin.title">एडमिन पैनल - Muslim Khatri 22 Nukh Jamaat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header compact">
+    <div class="header-inner">
+      <p class="eyebrow" data-i18n="admin.eyebrow">Admin Panel</p>
+      <h1>Muslim Khatri 22 Nukh Jamaat</h1>
+      <p class="tagline" data-i18n="admin.tagline">शहर/गांव, मकान और शादी रिकॉर्ड मैनेज करें</p>
+    </div>
+  </header>
+  <nav class="top-nav" data-i18n-aria="nav.mainLabel" aria-label="मुख्य नेविगेशन">
+    <a class="nav-link" href="index.html" data-i18n="nav.home">होम</a>
+    <a class="nav-link active" href="admin.html" data-i18n="nav.admin">एडमिन पैनल</a>
+  </nav>
+  <main class="container">
+    <section class="login-card" id="loginPanel">
+      <h2 data-i18n="admin.loginHeading">एडमिन लॉगिन</h2>
+      <p class="muted" data-i18n="admin.loginHint">Username: admin | Password: admin123</p>
+      <form id="loginForm" class="login-form">
+        <label><span>Username</span><input name="username" autocomplete="username" required></label>
+        <label><span>Password</span><input name="password" type="password" autocomplete="current-password" required></label>
+        <button class="btn primary" type="submit" data-i18n="common.login">Login</button>
+        <p class="form-error" id="loginError"></p>
+      </form>
+    </section>
+    <section class="admin-panel hidden" id="adminPanel">
+      <div class="toolbar">
+        <div>
+          <h2 class="section-title" data-i18n="admin.dashboard">एडमिन डैशबोर्ड</h2>
+          <p class="muted" data-i18n="admin.dashboardDesc">सभी बदलाव इसी browser में save होंगे।</p>
+        </div>
+        <button class="btn danger" id="logoutBtn" type="button" data-i18n="common.logout">Logout</button>
+      </div>
+      <div class="admin-grid">
+        <section class="admin-section">
+          <div class="section-head">
+            <h3 data-i18n="admin.cities">शहर/गांव</h3>
+            <button class="btn primary small" id="addCityBtn" type="button" data-i18n="admin.addCity">Add City/Village</button>
+          </div>
+          <div class="city-admin-list" id="adminCityList"></div>
+        </section>
+        <section class="admin-section">
+          <h3 data-i18n="admin.recordMgmt">रिकॉर्ड मैनेजमेंट</h3>
+          <label class="full-label"><span data-i18n="admin.citySelect">City/Village Select</span><select id="adminCitySelect"></select></label>
+          <div class="admin-actions-row">
+            <a class="btn primary" id="adminMakanLink" href="#" data-i18n="admin.makanManage">Makan Manage</a>
+            <a class="btn secondary" id="adminShadiLink" href="#" data-i18n="admin.shadiManage">Shadi Manage</a>
+          </div>
+        </section>
+
+        <section class="admin-section">
+          <h3>Data File (Backup)</h3>
+          <p class="muted">सभी रिकॉर्ड एक अलग data.json फाइल में रख सकते हो। Export करके रखो, बाद में Import करो।</p>
+          <div class="admin-actions-row">
+            <button class="btn secondary" id="exportJsonBtn" type="button">Export data.json</button>
+            <label class="btn secondary" style="cursor: pointer; display: inline-flex; align-items: center;">
+              Import data.json
+              <input type="file" id="importJsonInput" accept=".json" style="display:none">
+            </label>
+          </div>
+          <small class="muted">Note: Data अभी भी browser localStorage में रहता है। JSON backup के लिए है।</small>
+        </section>
+      </div>
+    </section>
+  </main>
+  <dialog class="modal" id="cityModal">
+    <form method="dialog" class="modal-box" id="cityForm">
+      <div class="modal-head">
+        <h2 id="cityModalTitle" data-i18n="admin.newCity">नया शहर/गांव</h2>
+        <button class="icon-btn" value="cancel" type="submit" data-i18n-aria="common.close" aria-label="बंद करें">×</button>
+      </div>
+      <label class="full-label"><span data-i18n="admin.cityName">City/Village Name</span><input name="cityName" required></label>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel" type="submit" data-i18n="common.cancel">रद्द करें</button>
+        <button class="btn primary" value="default" type="submit" data-i18n="common.save">सेव करें</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>

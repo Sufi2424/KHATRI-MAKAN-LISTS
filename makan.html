@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-title="makan.title">मकान सूची - Muslim Khatri 22 Nukh Jamaat</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .makan-header { background: linear-gradient(135deg, #0d4a35, #176b4d 55%, #c9962d); color: white; padding: 35px 20px 25px; text-align: center; margin-bottom: 0; }
+    .makan-header .eyebrow { font-size: 15px; font-weight: 700; letter-spacing: 3px; color: #ffe8a8; margin-bottom: 8px; }
+    .makan-header h1 { font-size: 42px; margin: 0 0 10px 0; line-height: 1.1; }
+    .makan-header .city-name { font-size: 24px; margin: 0; font-weight: 600; }
+    .top-actions { display: flex; justify-content: flex-end; gap: 12px; padding: 15px 20px; background: white; border-bottom: 1px solid #eee; }
+  </style>
+</head>
+<body>
+  <header class="makan-header">
+    <div class="header-inner">
+      <p class="eyebrow" data-i18n="makan.eyebrow">MAKAN DIRECTORY</p>
+      <h1>Muslim Khatri 22 Nukh Jamaat</h1>
+      <p class="city-name" id="makanSubtitle"><span id="pageCity">City/Village</span></p>
+    </div>
+  </header>
+  <nav class="top-nav" data-i18n-aria="nav.mainLabel" aria-label="मुख्य नेविगेशन">
+    <a class="nav-link" href="index.html" data-i18n="nav.home">होम</a>
+    <a class="nav-link" href="admin.html" data-i18n="nav.admin">एडमिन पैनल</a>
+  </nav>
+  <main class="container" style="max-width: 1200px; margin-top: 0;">
+    <div class="top-actions">
+      <button class="btn primary" id="addMakanBtn" type="button" data-i18n="common.newRecord">नया रिकॉर्ड</button>
+      <button class="btn success" id="exportMakanBtn" type="button" data-i18n="common.excelExport">Excel Export</button>
+    </div>
+    <section class="table-card makan-sheet">
+      <div class="table-wrap">
+        <table class="makan-register" id="makanTableContainer">
+          <thead>
+            <tr>
+              <th data-i18n="makan.colSerial">क्र.</th>
+              <th data-i18n="makan.colHouse">H.N.</th>
+              <th data-i18n="makan.colLakab">लक़ब</th>
+              <th data-i18n="makan.colName">नाम</th>
+              <th data-i18n="makan.colFather">वल्द नाम</th>
+              <th data-i18n="makan.colChaap">छाप *</th>
+              <th data-i18n="makan.colMobile">मोबाईल न.</th>
+            </tr>
+          </thead>
+          <tbody id="makanTable"></tbody>
+        </table>
+      </div>
+      <p class="empty-state" id="makanEmpty" data-i18n="makan.empty">अभी कोई रिकॉर्ड नहीं है।</p>
+    </section>
+  </main>
+  <dialog class="modal" id="makanModal">
+    <form method="dialog" class="modal-box" id="makanForm">
+      <div class="modal-head">
+        <h2 id="makanModalTitle" data-i18n="makan.newRecord">नया मकान रिकॉर्ड</h2>
+        <button class="icon-btn" value="cancel" type="submit" data-i18n-aria="common.close" aria-label="बंद करें">×</button>
+      </div>
+      <div class="form-grid">
+        <label><span data-i18n="makan.labelMohalla">Mohalla Name</span><select name="mohallaName" id="mohallaSelect" required></select></label>
+        <label class="hidden" id="newMohallaField"><span data-i18n="makan.labelNewMohalla">New Mohalla Name</span><input name="newMohallaName"></label>
+        <label><span data-i18n="makan.labelHouse">House Number</span><input name="houseNumber" required></label>
+        <label><span data-i18n="makan.labelLakab">Lakab</span><input name="lakab" required></label>
+        <label><span data-i18n="makan.labelMukhiya">Mukhiya Name</span><input name="mukhiyaName" required></label>
+        <label><span data-i18n="makan.labelFather">Father Name</span><input name="fatherName" required></label>
+        <label><span data-i18n="makan.labelChaap">Chaap</span><input name="chaap" required></label>
+        <label><span data-i18n="makan.labelMobile">Mobile Number</span><input name="mobileNumber" inputmode="tel" maxlength="15" required></label>
+        <label><span data-i18n="makan.labelBade">Bade</span><input name="bade" type="number" min="0" value="0" required></label>
+        <label><span data-i18n="makan.labelChote">Chote</span><input name="chote" type="number" min="0" value="0" required></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel" type="submit" data-i18n="common.cancel">रद्द करें</button>
+        <button class="btn primary" value="default" type="submit" data-i18n="common.save">सेव करें</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>
