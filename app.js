@@ -581,7 +581,12 @@ function saveData(data) {
       .then(() => {
         console.log("[FIREBASE] Data saved to cloud successfully");
       })
-      .catch(err => console.error("Firebase save error:", err));
+      .catch(err => {
+        console.error("Firebase save error:", err);
+        if (err && (err.code === 'PERMISSION_DENIED' || (err.message && err.message.includes('permission_denied')))) {
+          console.warn("%c[FIREBASE] Permission denied on save! Update rules (see console for details).", "color:red");
+        }
+      });
   } else {
     console.warn("%c[FIREBASE] Not connected - saving only locally!", "color:orange");
   }
@@ -614,6 +619,9 @@ function loadFreshDataFromFirebase() {
     })
     .catch(err => {
       console.error("Firebase load error, using local:", err);
+      if (err && (err.code === 'PERMISSION_DENIED' || (err.message && err.message.includes('permission_denied')))) {
+        console.warn("%c[FIREBASE] Permission denied! Update rules in Firebase Console (see instructions in previous message).", "color:red");
+      }
       // already rendered fallback above
     });
 }
