@@ -575,14 +575,15 @@ function saveData(data) {
 // Force load fresh data from Firebase on every page load/refresh
 // This fixes the issue of not seeing saved records on home after save or refresh
 function loadFreshDataFromFirebase() {
+  // Always render immediately with current data (local or default) so cities show right away
+  currentData = getData();
+  renderAllPages();
+
   if (!dbRef) {
-    // fallback to current getData logic
-    const data = getData();
-    currentData = data;
-    renderAllPages();
     return;
   }
 
+  // Then pull fresh from Firebase and update
   dbRef.once('value')
     .then(snapshot => {
       const data = snapshot.val();
@@ -598,8 +599,7 @@ function loadFreshDataFromFirebase() {
     })
     .catch(err => {
       console.error("Firebase load error, using local:", err);
-      currentData = getData();
-      renderAllPages();
+      // already rendered fallback above
     });
 }
 
@@ -1284,5 +1284,5 @@ initFirebase();
 setupFirebaseListener();  // keeps listening for changes while on page
 
 // Always pull fresh data from Firebase on load or refresh
-// This ensures saved records show on home page
+// This ensures cities and records show immediately on GitHub Pages
 loadFreshDataFromFirebase();
