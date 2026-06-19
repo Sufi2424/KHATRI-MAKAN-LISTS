@@ -1309,3 +1309,8 @@ setupFirebaseListener();  // keeps listening for changes while on page
 // Always pull fresh data from Firebase on load or refresh
 // This ensures cities and records show immediately on GitHub Pages
 loadFreshDataFromFirebase();
+
+// Attach button and form listeners. These were missing, so "New Record" button did nothing.
+setupMakan();
+setupShadi();
+setupAdmin();
