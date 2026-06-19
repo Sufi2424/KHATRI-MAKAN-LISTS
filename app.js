@@ -523,14 +523,27 @@ function createDefaultData() {
   return data;
 }
 
+function ensureDataStructure(data) {
+  if (!data || !Array.isArray(data.cities)) {
+    return createDefaultData();
+  }
+  data.makan = data.makan || {};
+  data.shadi = data.shadi || {};
+  data.cities.forEach((city) => {
+    data.makan[city.id] = data.makan[city.id] || [];
+    data.shadi[city.id] = data.shadi[city.id] || [];
+  });
+  return data;
+}
+
 // Listen for real-time changes from any device
 function setupFirebaseListener() {
   if (!dbRef) return;
   dbRef.on('value', (snapshot) => {
     const data = snapshot.val();
     if (data && Array.isArray(data.cities)) {
-      currentData = data;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); // keep local backup
+      currentData = ensureDataStructure(data);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData)); // keep local backup
     } else {
       currentData = createDefaultData();
       dbRef.set(currentData); // seed if empty
@@ -543,26 +556,28 @@ function setupFirebaseListener() {
 }
 
 function getData() {
-  if (currentData) return currentData;
+  if (currentData) return ensureDataStructure(currentData);
 
   // Fallback if Firebase not ready yet
   try {
     const local = localStorage.getItem(STORAGE_KEY);
     if (local) {
       const parsed = JSON.parse(local);
-      if (parsed && Array.isArray(parsed.cities)) return parsed;
+      if (parsed && Array.isArray(parsed.cities)) {
+        return ensureDataStructure(parsed);
+      }
     }
   } catch {}
   return createDefaultData();
 }
 
 function saveData(data) {
-  currentData = data;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); // keep local cache
+  currentData = ensureDataStructure(data);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData)); // keep local cache
 
   if (dbRef) {
     // Write to Firebase - this will sync to ALL devices instantly
-    dbRef.set(data)
+    dbRef.set(currentData)
       .then(() => {
         console.log("[FIREBASE] Data saved to cloud successfully");
       })
@@ -576,7 +591,7 @@ function saveData(data) {
 // This fixes the issue of not seeing saved records on home after save or refresh
 function loadFreshDataFromFirebase() {
   // Always render immediately with current data (local or default) so cities show right away
-  currentData = getData();
+  currentData = ensureDataStructure(getData());
   renderAllPages();
 
   if (!dbRef) {
@@ -588,8 +603,8 @@ function loadFreshDataFromFirebase() {
     .then(snapshot => {
       const data = snapshot.val();
       if (data && Array.isArray(data.cities)) {
-        currentData = data;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        currentData = ensureDataStructure(data);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
       } else {
         currentData = createDefaultData();
         dbRef.set(currentData);
